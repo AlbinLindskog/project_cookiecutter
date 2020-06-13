@@ -16,7 +16,7 @@ take a while as all the dependencies are installed for the first time.
 
 Go ahead and visit http://localhost:8000 {% if cookiecutter.use_react == 'y' %}and http://localhost:3000 {% endif %}
 in your browser. The project features live reloading, any changes you make in
-the code should be apparent as soon as you reload.
+the code should be apparent as soon as you refresh.
 
 To run a management command, in this case opening an interactive interpreter, run::
 
@@ -62,7 +62,8 @@ multi-server setup using Kubernetes.
 
 Kubernetes
 ^^^^^^^^
-Getting up and running with kubernetes + Management commands
+Uses a managed loadbalancer, PostgreSQl instance as database, managed Redis instance as cache,
+and Spaced Object Storage for static and media files.
 
 
 {% if cookiecutter.use_sentry == "y" %}

@@ -9,11 +9,12 @@ volumes:
 
 services:
   django:{% if cookiecutter.use_celery == 'y' %} &django{% endif %}
-    replicas: 2
     build:
       context: ..
       dockerfile: ./docker/production/django/Dockerfile
     image: {{ cookiecutter.project_slug }}_production_django
+    deploy:
+      replicas: 2
     depends_on:
       - postgres
       - redis
@@ -23,6 +24,7 @@ services:
     env_file:
       - .envs/.production/.django
       - .envs/.production/.postgres
+      - .envs/.production/.redis
     command: /start
 
   postgres:
@@ -54,18 +56,25 @@ services:
       - "0.0.0.0:443:443"
 
   redis:
-    image: redis:3.2
+    build:
+      context: ..
+      dockerfile: docker/production/redis/Dockerfile
+    image: {{ cookiecutter.project_slug }}_production_redis
+    env_file:
+      - .envs/.production/.redis
   {%- if cookiecutter.use_celery == 'y' %}
 
   celeryworker:
     <<: *django
-    replicas: 1
+    deploy:
+      replicas: 1
     image: {{ cookiecutter.project_slug }}_production_celeryworker
     command: /start-celeryworker
 
   celerybeat:
     <<: *django
-    replicas: 1
+    deploy:
+      replicas: 1
     image: {{ cookiecutter.project_slug }}_production_celerybeat
     command: /start-celerybeat
 

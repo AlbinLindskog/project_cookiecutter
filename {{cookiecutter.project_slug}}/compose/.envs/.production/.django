@@ -31,6 +31,3 @@ SENTRY_DSN=
 GRAYLOG_HOST=
 GRAYLOG_PORT=
 {% endif %}
-# Redis
-# ------------------------------------------------------------------------------
-REDIS_URL=redis://redis:6379/0

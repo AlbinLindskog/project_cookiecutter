@@ -17,6 +17,7 @@ services:
     env_file:
       - .envs/.local/.django
       - .envs/.local/.postgres
+      {% if cookiecutter.use_react == 'y' %}- .envs/.local/.redis{% endif %}
     ports:
       - "8000:8000"
     command: /start
@@ -53,7 +54,12 @@ services:
 
   {%- if cookiecutter.use_celery == 'y' %}
   redis:
-    image: redis:3.2
+    build:
+      context: ..
+      dockerfile: docker/local/redis/Dockerfile
+    image: {{ cookiecutter.project_slug }}_local_redis
+    env_file:
+      - .envs/.local/.redis
 
   celery:
     <<: *django  # Extend the django service

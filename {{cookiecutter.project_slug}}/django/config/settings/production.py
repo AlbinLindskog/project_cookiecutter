@@ -162,13 +162,13 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
         },
-        {%- if cookiecutter.use_graylog == 'y' -%}
-        {{ cookiecutter.project_slug }}: {
+        {%- if cookiecutter.use_graylog == 'y' %}
+        '{{ cookiecutter.project_slug }}': {
             'handlers': ['graylog',],
             'level': 'INFO',
             'propagate': False,
         },
-        {%- if cookiecutter.use_celery == 'y' -%}
+        {%- if cookiecutter.use_celery == 'y' %}
         'celery': {
             'handlers': ['graylog',],
             'level': 'INFO',

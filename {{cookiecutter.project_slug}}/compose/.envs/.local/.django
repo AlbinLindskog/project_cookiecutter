@@ -6,9 +6,3 @@ IPYTHONDIR=/app/.ipython
 # Django
 # ------------------------------------------------------------------------------
 DJANGO_SECRET_KEY={{ random_ascii_string(50) }}
-
-{%- if cookiecutter.use_celery == 'y' %}
-# Redis
-# ------------------------------------------------------------------------------
-REDIS_URL=redis://redis:6379/0
-{% endif %}

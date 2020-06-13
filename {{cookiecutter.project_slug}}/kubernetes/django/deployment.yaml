@@ -1,0 +1,46 @@
+apiVersion: extensions/v1
+kind: Deployment
+metadata:
+  name: django_deployment
+  labels:
+    deployment: django
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      pod: django
+  template:
+    metadata:
+      labels:
+        pod: django
+    spec:
+      containers:
+        - name: django
+          image: {{ cookiecutter.project_slug }}_production_django
+          ports:
+            - containerPort: 8000
+          command: /start
+          env:
+            - name: POSTGRES_HOST
+              value: postgres_service
+
+            - name: POSTGRES_PORT
+              value: 25060
+
+            - name: POSTGRES_DB
+              value: {{ cookiecutter.project_slug }}
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: user
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+
+            - name: REDIS_HOST
+              value: redis_service
