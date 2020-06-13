@@ -1,0 +1,15 @@
+-r ./base.txt
+
+gunicorn==19.9.0  # https://github.com/benoitc/gunicorn
+redis==3.5.0  # https://github.com/antirez/redis
+{%- if cookiecutter.use_sentry == "y" %}
+raven==6.10.0  # https://github.com/getsentry/raven-python
+{%- endif %}
+{%- if cookiecutter.use_sentry == "y" %}
+graypy==0.2.14 # https://github.com/severb/graypy
+{%- endif %}
+
+
+# Django
+# ------------------------------------------------------------------------------
+django-redis==4.10.0  # https://github.com/niwinz/django-redis

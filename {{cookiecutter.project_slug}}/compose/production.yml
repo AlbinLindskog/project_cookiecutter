@@ -1,0 +1,72 @@
+version: '3'
+
+volumes:
+  production_postgres_data: {}
+  production_postgres_data_backups: {}
+  production_caddy: {}
+  production_static: {}
+  production_media: {}
+
+services:
+  django:{% if cookiecutter.use_celery == 'y' %} &django{% endif %}
+    replicas: 2
+    build:
+      context: ..
+      dockerfile: ./docker/production/django/Dockerfile
+    image: {{ cookiecutter.project_slug }}_production_django
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - production_static:/app/{{ cookiecutter.project_slug }}/static-root
+      - production_media:/app/{{ cookiecutter.project_slug }}/media-root
+    env_file:
+      - .envs/.production/.django
+      - .envs/.production/.postgres
+    command: /start
+
+  postgres:
+    build:
+      context: ..
+      dockerfile: docker/production/postgres/Dockerfile
+    image: {{ cookiecutter.project_slug }}_production_postgres
+    volumes:
+      - production_postgres_data:/var/lib/postgresql/data
+      - production_postgres_data_backups:/backups
+    env_file:
+      - .envs/.production/.postgres
+
+  caddy:
+    build:
+      context: ..
+      dockerfile: docker/production/caddy/Dockerfile
+    image: {{ cookiecutter.project_slug }}_production_caddy
+    depends_on:
+      - django
+    volumes:
+      - production_caddy:/root/.caddy
+      - production_static:/srv/static
+      - production_media:/srv/media
+    env_file:
+      - .envs/.production/.caddy
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+
+  redis:
+    image: redis:3.2
+  {%- if cookiecutter.use_celery == 'y' %}
+
+  celeryworker:
+    <<: *django
+    replicas: 1
+    image: {{ cookiecutter.project_slug }}_production_celeryworker
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *django
+    replicas: 1
+    image: {{ cookiecutter.project_slug }}_production_celerybeat
+    command: /start-celerybeat
+
+  {%- endif %}

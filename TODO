@@ -1,0 +1,7 @@
+add CI/CD
+
+add kubernetes
+    Consider using S3 for static/media/react
+    Consider using a manage RDB
+    Prometheus for metrics
+    Add flower for celery monitoring

@@ -1,0 +1,16 @@
+{
+  "project_name": "Cookiecutter project",
+  "project_slug": "cookiecutter_project",
+  "domain_name": "pinestreet.tech",
+  "email": "albin@pinestreet.tech",
+  "version": "0.0.1",
+  "use_pycharm": "y",
+  "use_react": "y",
+  "use_celery": "y",
+  "use_sentry": "y",
+  "use_graylog": "y",
+  "debug": "n",
+  "_extensions": [
+    "cookiecutter.extensions.RandomStringExtension"
+  ]
+}
