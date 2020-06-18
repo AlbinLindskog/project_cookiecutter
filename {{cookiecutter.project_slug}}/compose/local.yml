@@ -28,7 +28,7 @@ services:
       dockerfile: docker/production/postgres/Dockerfile
     image: {{ cookiecutter.project_slug }}-local-postgres
     volumes:
-      - local_postgres_data:/var/lib/postgresql/data
+      - local-postgres-data:/var/lib/postgresql/data
     env_file:
       - .envs/.local/.postgres
 

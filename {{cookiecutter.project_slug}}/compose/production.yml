@@ -6,6 +6,7 @@ volumes:
   production-caddy: {}
   production-static: {}
   production-media: {}
+  production-redis: {}
 
 services:
   django:{% if cookiecutter.use_celery == 'y' %} &django{% endif %}
@@ -19,8 +20,8 @@ services:
       - postgres
       - redis
     volumes:
-      - production_static:/app/{{ cookiecutter.project_slug }}/static-root
-      - production_media:/app/{{ cookiecutter.project_slug }}/media-root
+      - production-static:/app/{{ cookiecutter.project_slug }}/static-root
+      - production-media:/app/{{ cookiecutter.project_slug }}/media-root
     env_file:
       - .envs/.production/.django
       - .envs/.production/.postgres
@@ -33,8 +34,8 @@ services:
       dockerfile: docker/production/postgres/Dockerfile
     image: {{ cookiecutter.project_slug }}-production-postgres
     volumes:
-      - production_postgres_data:/var/lib/postgresql/data
-      - production_postgres_data_backups:/backups
+      - production-postgres-data:/var/lib/postgresql/data
+      - production-postgres-data-backups:/backups
     env_file:
       - .envs/.production/.postgres
 
@@ -46,9 +47,9 @@ services:
     depends_on:
       - django
     volumes:
-      - production_caddy:/root/.caddy
-      - production_static:/srv/static
-      - production_media:/srv/media
+      - production-caddy:/root/.caddy
+      - production-static:/srv/static
+      - production-media:/srv/media
     env_file:
       - .envs/.production/.caddy
     ports:
@@ -60,6 +61,8 @@ services:
       context: ..
       dockerfile: docker/production/redis/Dockerfile
     image: {{ cookiecutter.project_slug }}-production-redis
+    volumes:
+      - production-redis:/data
     env_file:
       - .envs/.production/.redis
   {%- if cookiecutter.use_celery == 'y' %}

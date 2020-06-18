@@ -1,6 +1,6 @@
 {
   "project_name": "Cookiecutter project",
-  "project_slug": "cookiecutter_project",
+  "project_slug": "cookiecutter-project",
   "domain_name": "pinestreet.tech",
   "email": "albin@pinestreet.tech",
   "version": "0.0.1",
