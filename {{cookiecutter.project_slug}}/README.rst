@@ -67,7 +67,7 @@ and Spaced Object Storage for static and media files.
 
 Setup kubernetes cluster.
 
-    $ docker build . -f docker/kubernetes/django/Dockerfile -t dharoc/cookiecutter-project-kubernetes-django
+    $ docker build . -f docker/production/django/Dockerfile -t dharoc/cookiecutter-project-kubernetes-django
 
     $ docker push dharoc/cookiecutter-project-kubernetes-django
 

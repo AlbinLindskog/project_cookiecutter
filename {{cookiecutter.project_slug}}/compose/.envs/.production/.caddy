@@ -6,8 +6,3 @@ REACT_DOMAIN_NAME=app.{{ cookiecutter.domain_name }}
 {%- else %}
 DJANGO_DOMAIN_NAME={{ cookiecutter.domain_name }}
 {% endif %}
-{%- if cookiecutter.use_sentry == 'y' %}
-# Sentry
-# ------------------------------------------------------------------------------
-REACT_APP_SENTRY_DSN=
-{% endif %}

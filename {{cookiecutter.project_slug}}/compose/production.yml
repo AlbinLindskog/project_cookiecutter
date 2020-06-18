@@ -52,6 +52,7 @@ services:
       - production-media:/srv/media
     env_file:
       - .envs/.production/.caddy
+      - .envs/.production/.react
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"

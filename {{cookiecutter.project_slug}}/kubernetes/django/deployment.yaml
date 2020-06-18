@@ -22,6 +22,31 @@ spec:
           command: ["/entrypoint"]
           args: ["/start"]
           env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: config.settings.production
+
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: django-credentials
+                  key: secret_key
+
+            - name: EMAIL_HOST
+              value: test.com
+
+            - name: WEB_CONCURRENCY
+              value: "4"
+
+            {% if cookiecutter.use_sentry == 'y' %}
+            - name: SENTRY_DSN
+              value:
+            {% endif %}
+
+            {% if cookiecutter.use_graylog == 'y' %}
+            - name: GRAYLOG_HOST
+              value:
+            {% endif -%}
+
             - name: POSTGRES_HOST
               value: postgres-service
 
@@ -43,6 +68,9 @@ spec:
                   name: postgres-credentials
                   key: password
 
+            - name: POSTGRES_SSL
+              value: "true"
+
             - name: REDIS_HOST
               value: redis-service
 
@@ -63,3 +91,6 @@ spec:
                 secretKeyRef:
                   name: redis-credentials
                   key: password
+
+            - name: REDIS_SSL
+              value: "true"

@@ -81,18 +81,18 @@ DEFAULT_FROM_EMAIL = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = env('DJANGO_SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-host
-EMAIL_HOST = env('EMAIL_HOST', default='')
+EMAIL_HOST = env('EMAIL_HOST')
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
-EMAIL_PORT = env('EMAIL_PORT', default='')
+EMAIL_PORT = env.int('EMAIL_PORT', default=25)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
-EMAIL_HOST_USER = env('EMAIL_POST', default='')
+EMAIL_HOST_USER = env('EMAIL_POST', default=None)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
-EMAIL_HOST_PASSWORD = env('EMAIL_POST', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_POST', default=None)
 
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL regex.
-ADMIN_URL = env('DJANGO_ADMIN_URL')
+ADMIN_URL = env('DJANGO_ADMIN_URL', default='admin/')
 
 # Gunicorn
 # ------------------------------------------------------------------------------
