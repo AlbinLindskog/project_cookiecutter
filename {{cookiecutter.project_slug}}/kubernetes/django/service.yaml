@@ -1,13 +1,13 @@
-apiVersion: extensions/v1
 kind: Service
+apiVersion: v1
 metadata:
-  name: {{ cookiecutter.project_slug }}_django_service
+  name: cookiecutter-project-django-service
 spec:
   selector:
-    deployment: {{ cookiecutter.project_slug }}_django
+    deployment: cookiecutter-project_django
   ports:
   - name:
     protocol: TCP
     port: 8000
     targetPort: 8000
-  type: NodePort
+  type: ClusterIP

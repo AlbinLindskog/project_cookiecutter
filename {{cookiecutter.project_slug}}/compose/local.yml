@@ -1,14 +1,14 @@
 version: '3'
 
 volumes:
-  local_postgres_data: {}
+  local-postgres-data: {}
 
 services:
   django:{% if cookiecutter.use_celery == 'y' %} &django{% endif %}
     build:
       context: ..
       dockerfile: ./docker/local/django/Dockerfile
-    image: {{ cookiecutter.project_slug }}_local_django
+    image: {{ cookiecutter.project_slug }}-local-django
     depends_on:
       - postgres
       {% if cookiecutter.use_react == 'y' %}- redis{% endif %}
@@ -25,14 +25,14 @@ services:
   postgres:
     build:
       context: ..
-      dockerfile: docker/local/postgres/Dockerfile
-    image: {{ cookiecutter.project_slug }}_local_postgres
+      dockerfile: docker/production/postgres/Dockerfile
+    image: {{ cookiecutter.project_slug }}-local-postgres
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
     env_file:
       - .envs/.local/.postgres
 
-  {% if cookiecutter.use_react == 'y' %}
+  {%- if cookiecutter.use_react == 'y' %}
   react:
     build:
       context: ..
@@ -40,7 +40,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
     stdin_open: true  # https://github.com/facebook/create-react-app/issues/8688
-    image: {{ cookiecutter.project_slug }}_local_react
+    image: {{ cookiecutter.project_slug }}-local-react
     depends_on:
       - django
     volumes:
@@ -56,14 +56,14 @@ services:
   redis:
     build:
       context: ..
-      dockerfile: docker/local/redis/Dockerfile
-    image: {{ cookiecutter.project_slug }}_local_redis
+      dockerfile: docker/production/redis/Dockerfile
+    image: {{ cookiecutter.project_slug }}-local-redis
     env_file:
       - .envs/.local/.redis
 
   celery:
     <<: *django  # Extend the django service
-    image: {{ cookiecutter.project_slug }}_local_celeryworker
+    image: {{ cookiecutter.project_slug }}-local-celeryworker
     ports: []
     command: /start-celeryworker
   {%- endif %}

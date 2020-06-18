@@ -1,18 +1,18 @@
 version: '3'
 
 volumes:
-  production_postgres_data: {}
-  production_postgres_data_backups: {}
-  production_caddy: {}
-  production_static: {}
-  production_media: {}
+  production-postgres-data: {}
+  production-postgres-data-backups: {}
+  production-caddy: {}
+  production-static: {}
+  production-media: {}
 
 services:
   django:{% if cookiecutter.use_celery == 'y' %} &django{% endif %}
     build:
       context: ..
       dockerfile: ./docker/production/django/Dockerfile
-    image: {{ cookiecutter.project_slug }}_production_django
+    image: {{ cookiecutter.project_slug }}-production-django
     deploy:
       replicas: 2
     depends_on:
@@ -31,7 +31,7 @@ services:
     build:
       context: ..
       dockerfile: docker/production/postgres/Dockerfile
-    image: {{ cookiecutter.project_slug }}_production_postgres
+    image: {{ cookiecutter.project_slug }}-production-postgres
     volumes:
       - production_postgres_data:/var/lib/postgresql/data
       - production_postgres_data_backups:/backups
@@ -42,7 +42,7 @@ services:
     build:
       context: ..
       dockerfile: docker/production/caddy/Dockerfile
-    image: {{ cookiecutter.project_slug }}_production_caddy
+    image: {{ cookiecutter.project_slug }}-production-caddy
     depends_on:
       - django
     volumes:
@@ -59,7 +59,7 @@ services:
     build:
       context: ..
       dockerfile: docker/production/redis/Dockerfile
-    image: {{ cookiecutter.project_slug }}_production_redis
+    image: {{ cookiecutter.project_slug }}-production-redis
     env_file:
       - .envs/.production/.redis
   {%- if cookiecutter.use_celery == 'y' %}
@@ -68,14 +68,14 @@ services:
     <<: *django
     deploy:
       replicas: 1
-    image: {{ cookiecutter.project_slug }}_production_celeryworker
+    image: {{ cookiecutter.project_slug }}-production-celeryworker
     command: /start-celeryworker
 
   celerybeat:
     <<: *django
     deploy:
       replicas: 1
-    image: {{ cookiecutter.project_slug }}_production_celerybeat
+    image: {{ cookiecutter.project_slug }}-production-celerybeat
     command: /start-celerybeat
 
   {%- endif %}

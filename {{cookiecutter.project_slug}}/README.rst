@@ -65,6 +65,20 @@ Kubernetes
 Uses a managed loadbalancer, PostgreSQl instance as database, managed Redis instance as cache,
 and Spaced Object Storage for static and media files.
 
+Setup kubernetes cluster.
+
+    $ docker build . -f docker/kubernetes/django/Dockerfile -t dharoc/cookiecutter-project-kubernetes-django
+
+    $ docker push dharoc/cookiecutter-project-kubernetes-django
+
+Get logs::
+
+    $ kubectl logs <pod_name>
+
+Run management command::
+
+    $ kubectl exec <pod_name> -- python /app/manage.py migrate
+
 
 {% if cookiecutter.use_sentry == "y" %}
 Sentry
