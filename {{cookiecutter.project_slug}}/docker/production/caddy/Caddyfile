@@ -1,20 +1,18 @@
-www.{% raw %}{$DJANGO_DOMAIN_NAME}{% endraw %} {
-    redir https://{% raw %}{$DJANGO_DOMAIN_NAME}{% endraw %}
+{
+    order http_cache before reverse_proxy
 }
 
 {% raw %}{$DJANGO_DOMAIN_NAME}{% endraw %} {
-    proxy / django:5000 {
-        header_upstream Host {host}
-        header_upstream X-Real-IP {remote}
-        header_upstream X-Forwarded-Proto {scheme}
-        header_upstream X-CSRFToken {~csrftoken}
-        except /static /media  # Serve static and media files
+    reverse_proxy django:5000 {
+        header_up X-Real-IP {http.reverse_proxy.upstream.remote}
     }
-    root /srv
-    log stdout
-    errors stdout
-    cache
-    gzip
+    http_cache {
+        cache_type in_memory
+        match_path /
+    }
+    encode gzip
+    root * /srv
+    file_server
 }
 
 {% if cookiecutter.use_react == 'y' %}
@@ -23,13 +21,10 @@ www.{% raw %}{$REACT_DOMAIN_NAME}{% endraw %} {
 }
 
 {% raw %}{$REACT_DOMAIN_NAME}{% endraw %} {
-  rewrite {
-      to {path} {path}/ /
-  }
-  root /srv/react
-  gzip
-  log stdout
-  errors stdout
+  encode gzip
+  root * /srv/react
+  file_server
+  try_files {path} {path}/ /
 }
 
 {% endif %}

@@ -6,7 +6,6 @@ volumes:
   production-caddy: {}
   production-static: {}
   production-media: {}
-  production-redis: {}
 
 services:
   django:{% if cookiecutter.use_celery == 'y' %} &django{% endif %}
@@ -14,8 +13,6 @@ services:
       context: ..
       dockerfile: ./docker/production/django/Dockerfile
     image: {{ cookiecutter.project_slug }}-production-django
-    deploy:
-      replicas: 2
     depends_on:
       - postgres
       - redis
@@ -47,7 +44,7 @@ services:
     depends_on:
       - django
     volumes:
-      - production-caddy:/root/.caddy
+      - production-caddy:/data
       - production-static:/srv/static
       - production-media:/srv/media
     env_file:
@@ -62,23 +59,17 @@ services:
       context: ..
       dockerfile: docker/production/redis/Dockerfile
     image: {{ cookiecutter.project_slug }}-production-redis
-    volumes:
-      - production-redis:/data
     env_file:
       - .envs/.production/.redis
   {%- if cookiecutter.use_celery == 'y' %}
 
   celeryworker:
     <<: *django
-    deploy:
-      replicas: 1
     image: {{ cookiecutter.project_slug }}-production-celeryworker
     command: /start-celeryworker
 
   celerybeat:
     <<: *django
-    deploy:
-      replicas: 1
     image: {{ cookiecutter.project_slug }}-production-celerybeat
     command: /start-celerybeat
 
