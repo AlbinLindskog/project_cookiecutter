@@ -46,7 +46,7 @@ services:
     depends_on:
       - django
     volumes:
-      - production_caddy:/root/.caddy
+      - production_caddy:/data
       - production_static:/srv/static
       - production_media:/srv/media
     env_file:
