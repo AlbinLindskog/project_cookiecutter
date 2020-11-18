@@ -28,7 +28,7 @@ www.{% raw %}{$REACT_DOMAIN_NAME}{% endraw %} {
   encode gzip
   root * /srv/react
   file_server
-  try_files {path} {path}/ /
+  try_files {path} {path}/ index.html
 }
 
 {% endif %}
